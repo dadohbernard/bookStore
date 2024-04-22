@@ -1,0 +1,128 @@
+swagger: '2.0'
+info:
+  title: Bookstore API
+  version: 1.0.0
+paths:
+  /books:
+    get:
+      summary: Get all books
+      responses:
+        '200':
+          description: A list of books
+    post:
+      summary: Add a new book
+      parameters:
+        - in: body
+          name: book
+          required: true
+          schema:
+            $ref: '#/definitions/Book'
+      responses:
+        '201':
+          description: Book created successfully
+        '500':
+          description: An unexpected error occurred
+  /register:
+    post:
+      summary: Register a new customer
+      parameters:
+        - in: body
+          name: customer
+          required: true
+          schema:
+            $ref: '#/definitions/Customer'
+      responses:
+        '200':
+          description: Customer registered successfully
+        '400':
+          description: Bad request
+  /login:
+    post:
+      summary: Customer login
+      parameters:
+        - in: body
+          name: credentials
+          required: true
+          schema:
+            $ref: '#/definitions/LoginCredentials'
+      responses:
+        '200':
+          description: Login successful
+        '400':
+          description: Bad request
+  /orders:
+    post:
+      summary: Create a new order
+      parameters:
+        - in: body
+          name: order
+          required: true
+          schema:
+            $ref: '#/definitions/Order'
+      responses:
+        '201':
+          description: Order created successfully
+        '500':
+          description: An unexpected error occurred
+  /orders/{orderId}:
+    delete:
+      summary: Cancel an order
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Order cancelled successfully
+        '500':
+          description: An unexpected error occurred
+  /orders/{customerId}/books:
+    get:
+      summary: Get bought books by customer ID
+      parameters:
+        - in: path
+          name: customerId
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: A list of bought books
+        '400':
+          description: Bad request
+
+definitions:
+  Book:
+    type: object
+    properties:
+      title:
+        type: string
+      author:
+        type: string
+  Customer:
+    type: object
+    properties:
+      name:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+  LoginCredentials:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+  Order:
+    type: object
+    properties:
+      customer_id:
+        type: integer
+      bookIds:
+        type: array
+        items:
+          type: integer
